@@ -1,0 +1,13 @@
+{
+  "title": "CSSA Website",
+  "category": "Web Development",
+  "description": "The official website of the University of Manitoba's Computer Science Students' Association",
+  "detailedDescription": "I designed and developed the initial version of everything under the resources/guides/ path on the page, which allows importing guides written in Markdown from Git submodules to be natively rendered on Next.js using MDX. I managed this at the tail end of my time as Director of Student Affairs in the 2024-2025 term, when I was developing the Second Year Guide and wanted future students to view it in a more comfortable format than a paged PDF, which was what the first iteration of our First Year Guide was served as. I don't have access to the Cloudflare anymore to know how much traffic those pages alone attracted to the site, but everyone I talked to really liked it as well as the guides' content so I'm glad I did that! I left behind documentation so future CSSA teams can maintain it and continue to serve more guides for the student body.",
+  "technologies": ["Next.js", "TypeScript", "Tailwind"],
+  "githubUrl": "https://github.com/umanitoba-cssa/cssa-website-next",
+  "deployedUrl": "https://umanitobacssa.ca/resources/guides",
+  "images": [
+  ],
+  "featured": true,
+  "date": "2025-07-06"
+}

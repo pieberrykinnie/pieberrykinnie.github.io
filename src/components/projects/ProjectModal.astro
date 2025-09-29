@@ -1,0 +1,136 @@
+---
+---
+
+<div id="project-modal" class="fixed inset-0 bg-black bg-opacity-50 backdrop-blur-sm z-50 hidden items-center justify-center p-4">
+  <div class="bg-surface rounded-lg max-w-4xl w-full max-h-[90vh] overflow-y-auto animate-scale-in">
+    <div class="p-6">
+      <!-- Modal Header -->
+      <div class="flex items-start justify-between mb-6">
+        <div>
+          <h2 id="modal-title" class="text-2xl font-bold text-primary mb-2"></h2>
+          <span id="modal-category" class="px-3 py-1 bg-surface-alt text-accent text-sm font-medium rounded-full"></span>
+        </div>
+        <button id="close-modal" class="btn-secondary p-2" aria-label="Close modal">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+          </svg>
+        </button>
+      </div>
+
+      <!-- Modal Content -->
+      <div class="space-y-6">
+        <!-- Description -->
+        <div>
+          <h3 class="text-lg font-semibold text-primary mb-3">About This Project</h3>
+          <p id="modal-description" class="text-secondary leading-relaxed"></p>
+        </div>
+
+        <!-- Technologies -->
+        <div>
+          <h3 class="text-lg font-semibold text-primary mb-3">Technologies Used</h3>
+          <div id="modal-technologies" class="flex flex-wrap gap-2"></div>
+        </div>
+
+        <!-- Links -->
+        <div id="modal-links" class="flex flex-col sm:flex-row gap-4">
+          <a id="github-link" href="" class="btn btn-secondary hidden" target="_blank" rel="noopener noreferrer">
+            <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+              <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/>
+            </svg>
+            View Code
+          </a>
+          <a id="demo-link" href="" class="btn btn-primary hidden" target="_blank" rel="noopener noreferrer">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"></path>
+            </svg>
+            Live Demo
+          </a>
+        </div>
+
+        <!-- Date -->
+        <div class="pt-4 border-t border-color">
+          <span class="text-muted text-sm">
+            Completed: <span id="modal-date"></span>
+          </span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  const modal = document.getElementById('project-modal');
+  const closeModal = document.getElementById('close-modal');
+  
+  function openProjectModal(projectData: any) {
+    // Populate modal content
+    document.getElementById('modal-title')!.textContent = projectData.title;
+    document.getElementById('modal-category')!.textContent = projectData.category;
+    document.getElementById('modal-description')!.textContent = projectData.detailedDescription || projectData.description;
+    
+    // Technologies
+    const techContainer = document.getElementById('modal-technologies')!;
+    techContainer.innerHTML = '';
+    projectData.technologies.forEach((tech: string) => {
+      const techSpan = document.createElement('span');
+      techSpan.className = 'px-3 py-1 bg-surface-alt text-primary text-sm rounded-full';
+      techSpan.textContent = tech;
+      techContainer.appendChild(techSpan);
+    });
+    
+    // Links
+    const githubLink = document.getElementById('github-link') as HTMLAnchorElement;
+    const demoLink = document.getElementById('demo-link') as HTMLAnchorElement;
+    
+    if (projectData.githubUrl) {
+      githubLink.href = projectData.githubUrl;
+      githubLink.classList.remove('hidden');
+    } else {
+      githubLink.classList.add('hidden');
+    }
+    
+    if (projectData.deployedUrl) {
+      demoLink.href = projectData.deployedUrl;
+      demoLink.classList.remove('hidden');
+    } else {
+      demoLink.classList.add('hidden');
+    }
+    
+    // Date
+    const date = new Date(projectData.date).toLocaleDateString('en-US', { 
+      year: 'numeric', 
+      month: 'long',
+      day: 'numeric'
+    });
+    document.getElementById('modal-date')!.textContent = date;
+    
+    // Show modal
+    modal?.classList.remove('hidden');
+    modal?.classList.add('flex');
+    document.body.style.overflow = 'hidden';
+  }
+  
+  function closeProjectModal() {
+    modal?.classList.add('hidden');
+    modal?.classList.remove('flex');
+    document.body.style.overflow = '';
+  }
+  
+  // Event listeners
+  closeModal?.addEventListener('click', closeProjectModal);
+  
+  modal?.addEventListener('click', (e) => {
+    if (e.target === modal) {
+      closeProjectModal();
+    }
+  });
+  
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') {
+      closeProjectModal();
+    }
+  });
+  
+  // Make function globally available
+  (window as any).openProjectModal = openProjectModal;
+</script>

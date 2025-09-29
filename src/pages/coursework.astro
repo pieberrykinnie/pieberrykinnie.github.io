@@ -1,0 +1,219 @@
+---
+import Layout from '../layouts/Layout.astro';
+import { readdir, readFile } from 'node:fs/promises';
+
+// Load all course data
+const courseFiles = await readdir('./src/content/courses');
+const courses = await Promise.all(
+  courseFiles
+    .filter(file => file.endsWith('.json'))
+    .map(async (file) => {
+      const content = await readFile(`./src/content/courses/${file}`, 'utf-8');
+      return JSON.parse(content);
+    })
+);
+
+// Group courses by academic year and sort by semester
+const coursesByYear = {};
+courses.forEach(course => {
+  const year = course.semester.split(' ')[1];
+  if (!coursesByYear[year]) {
+    coursesByYear[year] = [];
+  }
+  coursesByYear[year].push(course);
+});
+
+// Sort years in descending order and courses within each year
+const sortedYears = Object.keys(coursesByYear).sort((a, b) => b - a);
+sortedYears.forEach(year => {
+  coursesByYear[year].sort((a, b) => {
+    const semesterOrder = { 'Fall': 2, 'Winter': 1, 'Spring': 0, 'Summer': 0 };
+    const aSemester = a.semester.split(' ')[0];
+    const bSemester = b.semester.split(' ')[0];
+    return (semesterOrder[bSemester] || 0) - (semesterOrder[aSemester] || 0);
+  });
+});
+---
+
+<Layout title="Coursework - Peter Vu" description="Explore the courses I've taken during my Computer Science studies and related blog writeups.">
+	<div class="py-16 px-4 sm:px-6 lg:px-8">
+		<div class="max-w-6xl mx-auto">
+			<!-- Header -->
+			<div class="text-center mb-16 animate-fade-in">
+				<h1 class="text-4xl font-bold text-primary mb-4">Academic Coursework 📚</h1>
+				<p class="text-secondary text-lg max-w-3xl mx-auto">
+					A comprehensive overview of the courses I've taken during my Computer Science studies, including key projects and related blog writeups.
+				</p>
+			</div>
+
+			<!-- Course Statistics -->
+			<div class="grid grid-cols-2 md:grid-cols-4 gap-6 mb-16">
+				<div class="text-center card p-6 animate-scale-in" style="--index: 0;">
+					<div class="text-3xl font-bold text-accent mb-2">{courses.length}</div>
+					<div class="text-secondary">Total Courses</div>
+				</div>
+				<div class="text-center card p-6 animate-scale-in" style="--index: 1;">
+					<div class="text-3xl font-bold text-accent mb-2">{Object.keys(coursesByYear).length}</div>
+					<div class="text-secondary">Academic Years</div>
+				</div>
+				<div class="text-center card p-6 animate-scale-in" style="--index: 2;">
+					<div class="text-3xl font-bold text-accent mb-2">{courses.filter(c => c.writeups && c.writeups.length > 0).length}</div>
+					<div class="text-secondary">Courses with Writeups</div>
+				</div>
+				<div class="text-center card p-6 animate-scale-in" style="--index: 3;">
+					<div class="text-3xl font-bold text-accent mb-2">{courses.reduce((total, c) => total + (c.writeups ? c.writeups.length : 0), 0)}</div>
+					<div class="text-secondary">Total Writeups</div>
+				</div>
+			</div>
+
+			<!-- Course Timeline by Year -->
+			{sortedYears.map((year, yearIndex) => (
+				<div class="mb-16" key={year}>
+					<div class="flex items-center mb-8">
+						<h2 class="text-3xl font-bold text-primary mr-4">Academic Year {year}</h2>
+						<div class="flex-1 h-px bg-border-light"></div>
+					</div>
+
+					<div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+						{coursesByYear[year].map((course, courseIndex) => (
+							<div class="card p-6 animate-slide-in-left" style={`--index: ${courseIndex};`} key={course.code}>
+								<div class="flex justify-between items-start mb-4">
+									<div>
+										<h3 class="text-xl font-bold text-primary mb-1">{course.title}</h3>
+										<div class="flex items-center gap-2 mb-2">
+											<span class="text-accent font-semibold">{course.code}</span>
+											<span class="text-secondary">•</span>
+											<span class="text-secondary">{course.institution}</span>
+										</div>
+										<div class="flex items-center gap-2">
+											<span class="text-sm bg-surface-alt text-primary px-2 py-1 rounded">{course.semester}</span>
+											{course.grade && (
+												<span class={`text-sm px-2 py-1 rounded font-medium ${
+													course.grade === 'A+' || course.grade === 'A' ? 'bg-green-100 text-green-800' :
+													course.grade === 'A-' || course.grade === 'B+' ? 'bg-blue-100 text-blue-800' :
+													'bg-gray-100 text-gray-800'
+												}`}>
+													Grade: {course.grade}
+												</span>
+											)}
+										</div>
+									</div>
+									<div class="flex-shrink-0">
+										{course.writeups && course.writeups.length > 0 && (
+											<div class="w-10 h-10 bg-accent rounded-full flex items-center justify-center">
+												<svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+													<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+												</svg>
+											</div>
+										)}
+									</div>
+								</div>
+
+								<p class="text-secondary mb-4">{course.description}</p>
+
+								{course.writeups && course.writeups.length > 0 && (
+									<div>
+										<h4 class="text-lg font-semibold text-primary mb-3">Related Writeups</h4>
+										<div class="space-y-2">
+											{course.writeups.map((writeup, writeupIndex) => (
+												<a
+													href={writeup.url}
+													class="block p-3 bg-surface-alt rounded-lg hover:bg-border-light transition-colors duration-200"
+													key={writeupIndex}
+												>
+													<div class="flex items-start justify-between">
+														<div>
+															<h5 class="font-medium text-primary mb-1">{writeup.title}</h5>
+															<p class="text-sm text-secondary">{writeup.description}</p>
+														</div>
+														<svg class="w-4 h-4 text-accent flex-shrink-0 mt-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+															<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"></path>
+														</svg>
+													</div>
+												</a>
+											))}
+										</div>
+									</div>
+								)}
+							</div>
+						))}
+					</div>
+				</div>
+			))}
+
+			<!-- Course Categories -->
+			<div class="card p-8 animate-fade-in">
+				<h2 class="text-3xl font-bold text-primary mb-8 text-center">Course Categories</h2>
+				<div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+					<div class="text-center">
+						<div class="w-16 h-16 mx-auto mb-4 bg-gradient-to-br from-blue-400 to-blue-600 rounded-full flex items-center justify-center">
+							<svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+								<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 7h6m0 10v-3m-3 3h.01M9 17h.01M9 14h.01M12 14h.01M15 11h.01M12 11h.01M9 11h.01M7 21h10a2 2 0 002-2V5a2 2 0 00-2-2H7a2 2 0 00-2 2v14a2 2 0 002 2z"></path>
+							</svg>
+						</div>
+						<h3 class="text-xl font-semibold text-primary mb-3">Core Computer Science</h3>
+						<p class="text-secondary">Foundational CS courses covering algorithms, data structures, programming languages, and system design.</p>
+					</div>
+					<div class="text-center">
+						<div class="w-16 h-16 mx-auto mb-4 bg-gradient-to-br from-green-400 to-green-600 rounded-full flex items-center justify-center">
+							<svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+								<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path>
+							</svg>
+						</div>
+						<h3 class="text-xl font-semibold text-primary mb-3">Mathematics</h3>
+						<p class="text-secondary">Mathematical foundations including calculus, discrete mathematics, statistics, and data science mathematics.</p>
+					</div>
+					<div class="text-center">
+						<div class="w-16 h-16 mx-auto mb-4 bg-gradient-to-br from-purple-400 to-purple-600 rounded-full flex items-center justify-center">
+							<svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+								<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z"></path>
+							</svg>
+						</div>
+						<h3 class="text-xl font-semibold text-primary mb-3">Interdisciplinary</h3>
+						<p class="text-secondary">Courses from related fields including film studies, technical communication, and artificial intelligence.</p>
+					</div>
+				</div>
+			</div>
+
+			<!-- Browse Blog Button -->
+			<div class="text-center mt-12 animate-fade-in">
+				<p class="text-secondary mb-6">
+					Want to read more about my course projects and technical writeups?
+				</p>
+				<a href="/blog" class="btn btn-primary">
+					Browse All Blog Posts →
+				</a>
+			</div>
+		</div>
+	</div>
+</Layout>
+
+<style>
+.animate-scale-in {
+	animation: scaleIn 0.6s ease-out forwards;
+	animation-delay: calc(var(--index) * 0.1s);
+	opacity: 0;
+	transform: scale(0.8);
+}
+
+.animate-slide-in-left {
+	animation: slideInLeft 0.6s ease-out forwards;
+	animation-delay: calc(var(--index) * 0.1s);
+	opacity: 0;
+	transform: translateX(-20px);
+}
+
+@keyframes scaleIn {
+	to {
+		opacity: 1;
+		transform: scale(1);
+	}
+}
+
+@keyframes slideInLeft {
+	to {
+		opacity: 1;
+		transform: translateX(0);
+	}
+}
+</style>

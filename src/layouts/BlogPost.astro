@@ -1,0 +1,302 @@
+---
+import Layout from './Layout.astro';
+import { formatDate } from '../utils/dateUtils';
+
+export interface Props {
+  title: string;
+  description: string;
+  publishDate: Date;
+  updatedDate?: Date;
+  category: string;
+  tags: string[];
+  featured?: boolean;
+  author?: string;
+  image?: string;
+  courseCode?: string;
+  courseName?: string;
+}
+
+const {
+  title,
+  description,
+  publishDate,
+  updatedDate,
+  category,
+  tags,
+  featured = false,
+  author = 'Peter Vu',
+  image,
+  courseCode,
+  courseName,
+} = Astro.props;
+
+const formattedPublishDate = formatDate(publishDate);
+const formattedUpdatedDate = updatedDate ? formatDate(updatedDate) : null;
+---
+
+<Layout title={`${title} - Peter Vu`} description={description}>
+  <article class="py-16 px-4 sm:px-6 lg:px-8">
+    <div class="max-w-4xl mx-auto">
+      <!-- Article Header -->
+      <header class="mb-12 animate-fade-in">
+        <!-- Breadcrumb -->
+        <nav class="mb-6">
+          <ol class="flex items-center space-x-2 text-sm text-secondary">
+            <li><a href="/" class="hover:text-accent transition-colors">Home</a></li>
+            <li><span>/</span></li>
+            <li><a href="/blog" class="hover:text-accent transition-colors">Blog</a></li>
+            <li><span>/</span></li>
+            <li class="text-primary font-medium">{title}</li>
+          </ol>
+        </nav>
+
+        <!-- Category & Featured Badge -->
+        <div class="flex items-center gap-3 mb-4">
+          <span class="px-3 py-1 bg-accent text-white text-sm font-medium rounded-full">
+            {category}
+          </span>
+          {featured && (
+            <span class="px-3 py-1 bg-gradient-to-r from-orange-400 to-orange-600 text-white text-sm font-medium rounded-full">
+              Featured
+            </span>
+          )}
+          {courseCode && (
+            <span class="px-3 py-1 bg-blue-100 text-blue-800 text-sm font-medium rounded-full">
+              {courseCode}
+            </span>
+          )}
+        </div>
+
+        <!-- Title -->
+        <h1 class="text-4xl md:text-5xl font-bold text-primary mb-6 leading-tight">
+          {title}
+        </h1>
+
+        <!-- Course Name (if applicable) -->
+        {courseName && (
+          <p class="text-xl text-accent mb-6 font-medium">
+            Related to: {courseName}
+          </p>
+        )}
+
+        <!-- Description -->
+        <p class="text-xl text-secondary mb-8 leading-relaxed">
+          {description}
+        </p>
+
+        <!-- Meta Information -->
+        <div class="flex flex-wrap items-center gap-6 pb-8 border-b border-border-light">
+          <div class="flex items-center gap-2">
+            <svg class="w-5 h-5 text-secondary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path>
+            </svg>
+            <span class="text-secondary">By {author}</span>
+          </div>
+          <div class="flex items-center gap-2">
+            <svg class="w-5 h-5 text-secondary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
+            </svg>
+            <span class="text-secondary">Published {formattedPublishDate}</span>
+          </div>
+          {formattedUpdatedDate && (
+            <div class="flex items-center gap-2">
+              <svg class="w-5 h-5 text-secondary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path>
+              </svg>
+              <span class="text-secondary">Updated {formattedUpdatedDate}</span>
+            </div>
+          )}
+        </div>
+
+        <!-- Tags -->
+        {tags.length > 0 && (
+          <div class="mt-6">
+            <div class="flex flex-wrap gap-2">
+              {tags.map((tag) => (
+                <span class="px-3 py-1 bg-surface-alt text-primary text-sm rounded-full">
+                  #{tag}
+                </span>
+              ))}
+            </div>
+          </div>
+        )}
+      </header>
+
+      <!-- Featured Image -->
+      {image && (
+        <div class="mb-12 animate-fade-in">
+          <img
+            src={image}
+            alt={title}
+            class="w-full h-64 md:h-96 object-cover rounded-lg shadow-lg"
+            loading="eager"
+          />
+        </div>
+      )}
+
+      <!-- Article Content -->
+      <div class="prose prose-lg prose-gray max-w-none animate-fade-in">
+        <slot />
+      </div>
+
+      <!-- Article Footer -->
+      <footer class="mt-16 pt-8 border-t border-border-light animate-fade-in">
+        <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-6">
+          <div>
+            <p class="text-secondary mb-2">Thanks for reading!</p>
+            <p class="text-sm text-secondary">
+              Have questions or feedback? Feel free to reach out on my contact page.
+            </p>
+          </div>
+          <div class="flex gap-4">
+            <a href="/blog" class="btn btn-secondary">
+              ← Back to Blog
+            </a>
+            <a href="/contact" class="btn btn-primary">
+              Get in Touch
+            </a>
+          </div>
+        </div>
+      </footer>
+    </div>
+  </article>
+</Layout>
+
+<style>
+  /* Prose styling for markdown content */
+  .prose {
+    color: var(--color-text-secondary);
+    line-height: 1.75;
+  }
+
+  .prose h1 {
+    font-size: 1.875rem;
+    font-weight: 700;
+    color: var(--color-text-primary);
+    margin-top: 3rem;
+    margin-bottom: 1.5rem;
+  }
+
+  .prose h1:first-child {
+    margin-top: 0;
+  }
+
+  .prose h2 {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: var(--color-text-primary);
+    margin-top: 2.5rem;
+    margin-bottom: 1rem;
+  }
+
+  .prose h3 {
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: var(--color-text-primary);
+    margin-top: 2rem;
+    margin-bottom: 0.75rem;
+  }
+
+  .prose h4 {
+    font-size: 1.125rem;
+    font-weight: 600;
+    color: var(--color-text-primary);
+    margin-top: 1.5rem;
+    margin-bottom: 0.5rem;
+  }
+
+  .prose p {
+    margin-bottom: 1.5rem;
+  }
+
+  .prose ul, .prose ol {
+    margin-bottom: 1.5rem;
+    margin-left: 1.5rem;
+  }
+
+  .prose li {
+    margin-bottom: 0.5rem;
+  }
+
+  .prose ul li {
+    list-style-type: disc;
+  }
+
+  .prose ol li {
+    list-style-type: decimal;
+  }
+
+  .prose blockquote {
+    border-left: 4px solid var(--color-primary);
+    padding-left: 1.5rem;
+    padding-top: 0.5rem;
+    padding-bottom: 0.5rem;
+    margin: 1.5rem 0;
+    background-color: var(--color-surface-alt);
+    border-radius: 0 0.5rem 0.5rem 0;
+    font-style: italic;
+  }
+
+  .prose code {
+    background-color: var(--color-surface-alt);
+    padding: 0.25rem 0.5rem;
+    border-radius: 0.25rem;
+    font-size: 0.875rem;
+    font-family: ui-monospace, SFMono-Regular, "SF Mono", Consolas, "Liberation Mono", Menlo, monospace;
+    color: var(--color-primary);
+  }
+
+  .prose pre {
+    background-color: var(--color-surface-alt);
+    padding: 1.5rem;
+    border-radius: 0.5rem;
+    overflow-x: auto;
+    margin: 1.5rem 0;
+  }
+
+  .prose pre code {
+    background-color: transparent;
+    padding: 0;
+    color: var(--color-text-primary);
+  }
+
+  .prose a {
+    color: var(--color-primary);
+    text-decoration: underline;
+    transition: color 0.2s ease;
+  }
+
+  .prose a:hover {
+    color: var(--color-primary-dark);
+  }
+
+  .prose img {
+    border-radius: 0.5rem;
+    box-shadow: var(--shadow-md);
+    margin: 2rem 0;
+    width: 100%;
+  }
+
+  .prose table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 2rem 0;
+  }
+
+  .prose th, .prose td {
+    border: 1px solid var(--color-border-light);
+    padding: 1rem;
+    text-align: left;
+  }
+
+  .prose th {
+    background-color: var(--color-surface-alt);
+    font-weight: 600;
+    color: var(--color-text-primary);
+  }
+
+  .prose hr {
+    border-color: var(--color-border-light);
+    margin: 3rem 0;
+  }
+</style>

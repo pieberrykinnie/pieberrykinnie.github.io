@@ -1,0 +1,121 @@
+---
+import Layout from '../layouts/Layout.astro';
+import ProjectCard from '../components/projects/ProjectCard.astro';
+import ProjectModal from '../components/projects/ProjectModal.astro';
+import { readdir, readFile } from 'node:fs/promises';
+
+// Load all project data
+const projectFiles = await readdir('./src/content/projects');
+const projects = await Promise.all(
+  projectFiles
+    .filter(file => file.endsWith('.json'))
+    .map(async (file) => {
+      const content = await readFile(`./src/content/projects/${file}`, 'utf-8');
+      return JSON.parse(content);
+    })
+);
+
+// Sort projects by date (newest first) and featured status
+const sortedProjects = projects.sort((a, b) => {
+  if (a.featured && !b.featured) return -1;
+  if (!a.featured && b.featured) return 1;
+  return new Date(b.date).getTime() - new Date(a.date).getTime();
+});
+
+const categories = ['All', ...new Set(projects.map(p => p.category))];
+---
+
+<Layout title="Projects - Peter Vu" description="Explore my portfolio of software development, machine learning, and research projects.">
+  <div class="py-16 px-4 sm:px-6 lg:px-8">
+    <div class="max-w-6xl mx-auto">
+      <!-- Header -->
+      <div class="text-center mb-12 animate-fade-in">
+        <h1 class="text-4xl font-bold text-primary mb-4">Stuff I've Built 🛠️</h1>
+        <p class="text-secondary text-lg max-w-2xl mx-auto">
+          Here's a collection of projects I've worked on, be it for hackathons, courses, or toy quality-of-lifes! To be updated when I have time...
+        </p>
+      </div>
+
+      <!-- Filter Buttons -->
+      <div class="flex flex-wrap justify-center gap-3 mb-12 animate-slide-in-left">
+        {categories.map((category) => (
+          <button 
+            class={`filter-btn px-4 py-2 rounded-lg font-medium transition-all duration-200 ${
+              category === 'All' 
+                ? 'bg-primary text-white' 
+                : 'bg-surface border border-color text-secondary hover:border-primary hover:text-accent'
+            }`}
+            data-category={category}
+          >
+            {category}
+          </button>
+        ))}
+      </div>
+
+      <!-- Projects Grid -->
+      <div id="projects-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 animate-stagger">
+        {sortedProjects.map((project, index) => (
+          <div class="project-item" data-category={project.category}>
+            <ProjectCard project={project} index={index} />
+          </div>
+        ))}
+      </div>
+
+      <!-- No results message -->
+      <div id="no-results" class="text-center py-12 hidden">
+        <p class="text-secondary text-lg">No projects found for the selected category.</p>
+      </div>
+    </div>
+  </div>
+
+  <ProjectModal />
+</Layout>
+
+<script>
+  // Filter functionality
+  const filterBtns = document.querySelectorAll('.filter-btn');
+  const projectItems = document.querySelectorAll('.project-item');
+  const noResults = document.getElementById('no-results');
+
+  filterBtns.forEach(btn => {
+    btn.addEventListener('click', () => {
+      const category = btn.getAttribute('data-category');
+      
+      // Update active button
+      filterBtns.forEach(b => {
+        if (b.getAttribute('data-category') === category) {
+          b.className = 'filter-btn px-4 py-2 rounded-lg font-medium transition-all duration-200 bg-primary text-white';
+        } else {
+          b.className = 'filter-btn px-4 py-2 rounded-lg font-medium transition-all duration-200 bg-surface border border-color text-secondary hover:border-primary hover:text-accent';
+        }
+      });
+      
+      // Filter projects
+      let visibleCount = 0;
+      projectItems.forEach(item => {
+        const itemCategory = item.getAttribute('data-category');
+        if (category === 'All' || itemCategory === category) {
+          item.style.display = 'block';
+          visibleCount++;
+        } else {
+          item.style.display = 'none';
+        }
+      });
+      
+      // Show/hide no results message
+      if (visibleCount === 0) {
+        noResults?.classList.remove('hidden');
+      } else {
+        noResults?.classList.add('hidden');
+      }
+    });
+  });
+
+  // Project card click handlers
+  document.querySelectorAll('.project-card').forEach(card => {
+    card.addEventListener('click', () => {
+      const projectData = JSON.parse(card.getAttribute('data-project') || '{}');
+      (window as any).openProjectModal(projectData);
+    });
+  });
+</script>

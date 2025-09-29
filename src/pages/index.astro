@@ -1,11 +1,221 @@
 ---
-import Welcome from '../components/Welcome.astro';
 import Layout from '../layouts/Layout.astro';
-
-// Welcome to Astro! Wondering what to do next? Check out the Astro documentation at https://docs.astro.build
-// Don't want to use any of this? Delete everything in this file, the `assets`, `components`, and `layouts` directories, and start fresh.
 ---
 
-<Layout>
-	<Welcome />
+<Layout title="Peter Vu" description="Hey! I'm Peter, a CS student looking for my first co-op. Check out my projects and let's connect!">
+	<!-- Hero Section -->
+	<section class="py-20 px-4 sm:px-6 lg:px-8">
+		<div class="max-w-4xl mx-auto text-center">
+			<div class="animate-fade-in">
+				<div class="w-32 h-32 mx-auto mb-8 rounded-full bg-gradient-to-br from-orange-400 to-orange-600 flex items-center justify-center text-white text-5xl shadow-lg">
+					👋
+				</div>
+				<h1 class="text-4xl sm:text-5xl lg:text-6xl font-bold text-primary mb-6">
+					Hey, I'm Peter!
+				</h1>
+				<p class="text-xl sm:text-2xl text-secondary mb-8 max-w-3xl mx-auto">
+          Whether you're a fellow student, industry professional, or just someone swinging by, welcome! I'm a CS student at University of Manitoba who loves learning new things and solving hard problems. Currently looking for my first co-op opportunity in Summer 2026! 🚀
+				</p>
+				<div class="flex flex-col sm:flex-row gap-4 justify-center items-center">
+					<a href="/projects" class="btn btn-primary">
+						Check out my projects 🛠️
+					</a>
+					<a href="/experience" class="btn btn-secondary">
+						What I've been up to
+					</a>
+					<a href="mailto:vuqh1@myumanitoba.ca" class="btn btn-secondary">
+						Let's chat! 💬
+					</a>
+				</div>
+			</div>
+		</div>
+	</section>
+
+	<!-- About Section -->
+	<section class="py-16 px-4 sm:px-6 lg:px-8 bg-surface-alt">
+		<div class="max-w-6xl mx-auto">
+			<div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+				<div class="animate-slide-in-left">
+					<h2 class="text-3xl font-bold text-primary mb-6">A bit about me ✨</h2>
+					<div class="space-y-4 text-secondary text-lg">
+						<p>
+              I'm a junior at the University of Manitoba doing a Honours degree in Computer Science, minoring in Mathematics and Film Studies, and I genuinely love what I do! I always grew up interested in mathematics and programming, and I couldn't have envisioned myself doing anything else. I've dipped my fingers into web development, game development, machine learning, data analytics, cybersecurity, and competitive programming. Every course, project, or work I've taken has been such an exciting journey and there being so much more to learn keeps me going every day. My finish line will be once I've accumulated enough knowledge and can help raise the next generation of CS students to be much greater and capable than I am!
+						</p>
+						<p>
+              Currently, I'm on the hunt for my first co-op internship starting Summer 2026. I bring with me a data-driven problem solving mindset, technical communication skills, and abilities to quickly spin up proof-of-concepts from my wonderful time as an AI Research/Engineer Intern at PIXTA Vietnam over Summer 2025. I have a preference for Software Developer and Game Programmer roles, especially if I can contribute to an established codebase and get my hands dirty in a fast-paced, constantly shipping environment! You can check out more of my past accomplishments and qualifications in the <a href="/experience" class="text-accent">Experience</a> and <a href="/projects" class="text-accent">Projects</a> sections.
+						</p>
+						<p>
+              Aside from coding, I also enjoy helping fellow CS students grow, be it through writing student guides published at the <a href="https://umanitobacssa.ca/resources/guides" class="text-accent">Computer Science Students' Association</a>, my Teaching Assistant/Grader gigs or explaining course content to my classmates. If you're a student, do check out my <a href="/coursework" class="text-accent">Coursework</a> page for my own resources on how to succeed! I also take competition very seriously; do hit me up if you are looking for hackathon teammates! As for more casual hobbies, I love eating good food, taking extra naps, and watching movies. My favorite franchise currently is <a href="https://umamusume.com/" class="text-accent">Umamusume: Pretty Derby</a> and my GitHub's namesake is Pieberry, the main protagonist of <a href="https://witchspringr.com/en/" class="text-accent">Witch Spring</a>!
+						</p>
+					</div>
+				</div>
+				<div class="animate-slide-in-right">
+					<div class="grid grid-cols-2 gap-6">
+						<div class="card p-6 text-center">
+							<div class="text-3xl font-bold text-accent mb-2">4.26</div>
+							<div class="text-secondary">GPA</div>
+						</div>
+						<div class="card p-6 text-center">
+              <div class="text-3xl font-bold text-accent mb-2">$15,000+</div>
+							<div class="text-secondary">in Awards Value</div>
+						</div>
+						<div class="card p-6 text-center">
+							<div class="text-3xl font-bold text-accent mb-2">10+</div>
+							<div class="text-secondary">Personal Projects</div>
+						</div>
+						<div class="card p-6 text-center">
+              <div class="text-3xl font-bold text-accent mb-2">1</div>
+							<div class="text-secondary">Hackathon won (& counting...)</div>
+						</div>
+						<div class="card p-6 text-center">
+							<div class="text-3xl font-bold text-accent mb-2">12</div>
+              <div class="text-secondary">unique TA/Grader Positions</div>
+						</div>
+						<div class="card p-6 text-center">
+              <div class="text-3xl font-bold text-accent mb-2">3</div>
+							<div class="text-secondary">Leadership Positions</div>
+						</div>
+						<div class="card p-6 text-center">
+							<div class="text-3xl font-bold text-accent mb-2">3rd</div>
+							<div class="text-secondary">Year as a Bison</div>
+						</div>
+						<div class="card p-6 text-center">
+							<div class="text-3xl font-bold text-accent mb-2">∞</div>
+							<div class="text-secondary">Tim Horton's Iced Capps</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</section>
+
+	<!-- Skills Section -->
+	<section class="py-16 px-4 sm:px-6 lg:px-8">
+		<div class="max-w-6xl mx-auto">
+			<div class="text-center mb-12 animate-fade-in">
+				<h2 class="text-3xl font-bold text-primary mb-4">What I know (so far) 🤓</h2>
+				<p class="text-secondary text-lg max-w-2xl mx-auto">
+					Here's my current tech stack! Always learning and adding more to this list.
+				</p>
+			</div>
+			
+			<div class="grid grid-cols-1 md:grid-cols-3 gap-8 animate-stagger">
+				<div class="card p-6 animate-scale-in" style="--index: 0;">
+					<h3 class="text-xl font-semibold text-primary mb-4">Web Development 🌐</h3>
+					<div class="space-y-2">
+						<div class="flex items-center gap-2">
+							<span class="w-2 h-2 bg-accent rounded-full"></span>
+              <span class="text-secondary">HTML, CSS, JavaScript, SQL</span>
+						</div>
+						<div class="flex items-center gap-2">
+							<span class="w-2 h-2 bg-accent rounded-full"></span>
+              <span class="text-secondary">TypeScript, Python</span>
+						</div>
+						<div class="flex items-center gap-2">
+							<span class="w-2 h-2 bg-accent rounded-full"></span>
+              <span class="text-secondary">React, Next.js, Astro, Tailwind</span>
+						</div>
+						<div class="flex items-center gap-2">
+							<span class="w-2 h-2 bg-accent rounded-full"></span>
+              <span class="text-secondary">Node.js, Express, Flask, FastAPI</span>
+						</div>
+						<div class="flex items-center gap-2">
+							<span class="w-2 h-2 bg-accent rounded-full"></span>
+              <span class="text-secondary">PostgreSQL, SQLite</span>
+						</div>
+						<div class="flex items-center gap-2">
+							<span class="w-2 h-2 bg-accent rounded-full"></span>
+              <span class="text-secondary">Docker, Vercel, AWS EC2</span>
+						</div>
+					</div>
+				</div>
+				
+				<div class="card p-6 animate-scale-in" style="--index: 1;">
+					<h3 class="text-xl font-semibold text-primary mb-4">Data Science 📊</h3>
+					<div class="space-y-2">
+						<div class="flex items-center gap-2">
+							<span class="w-2 h-2 bg-accent rounded-full"></span>
+              <span class="text-secondary">Python, R, SQL</span>
+						</div>
+						<div class="flex items-center gap-2">
+							<span class="w-2 h-2 bg-accent rounded-full"></span>
+              <span class="text-secondary">PyTorch, Keras, diffusers</span>
+						</div>
+						<div class="flex items-center gap-2">
+							<span class="w-2 h-2 bg-accent rounded-full"></span>
+              <span class="text-secondary">ClearML, Streamlit, Milvus</span>
+						</div>
+						<div class="flex items-center gap-2">
+							<span class="w-2 h-2 bg-accent rounded-full"></span>
+              <span class="text-secondary">Google Sheets, Excel, RStudio</span>
+						</div>
+						<div class="flex items-center gap-2">
+							<span class="w-2 h-2 bg-accent rounded-full"></span>
+              <span class="text-secondary">Practical experience in building ML pipelines, evaluation metrics, and running experiments with fine-tuning image generation models</span>
+						</div>
+					</div>
+				</div>
+				
+				<div class="card p-6 animate-scale-in" style="--index: 2;">
+					<h3 class="text-xl font-semibold text-primary mb-4">Other Stuffs 🤖</h3>
+					<div class="space-y-2">
+						<div class="flex items-center gap-2">
+							<span class="w-2 h-2 bg-accent rounded-full"></span>
+              <span class="text-secondary">Java, C++, C, Ruby, Lisp, Prolog</span>
+						</div>
+						<div class="flex items-center gap-2">
+							<span class="w-2 h-2 bg-accent rounded-full"></span>
+              <span class="text-secondary">Unity, Godot, GameMaker</span>
+						</div>
+						<div class="flex items-center gap-2">
+							<span class="w-2 h-2 bg-accent rounded-full"></span>
+              <span class="text-secondary">Git, GitHub, Jira, Trello</span>
+						</div>
+						<div class="flex items-center gap-2">
+							<span class="w-2 h-2 bg-accent rounded-full"></span>
+              <span class="text-secondary">Markdown, LaTeX, OpenAPI</span>
+						</div>
+						<div class="flex items-center gap-2">
+							<span class="w-2 h-2 bg-accent rounded-full"></span>
+              <span class="text-secondary">Linux, WSL, Neovim</span>
+						</div>
+						<div class="flex items-center gap-2">
+							<span class="w-2 h-2 bg-accent rounded-full"></span>
+              <span class="text-secondary">Vibe coding</span>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</section>
+
+	<!-- Contact Section -->
+	<section class="py-16 px-4 sm:px-6 lg:px-8 bg-surface-alt">
+		<div class="max-w-4xl mx-auto text-center animate-fade-in">
+			<h2 class="text-3xl font-bold text-primary mb-6">Let's be friends! 🤝</h2>
+			<p class="text-secondary text-lg mb-8 max-w-2xl mx-auto">
+				Always down to chat about tech, collaborate on projects, or just grab coffee and talk about life. Hit me up!
+			</p>
+			<div class="flex flex-col sm:flex-row gap-4 justify-center">
+				<a href="mailto:vuqh1@myumanitoba.ca" class="btn btn-primary">
+					<svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+						<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 4.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path>
+					</svg>
+					vuqh1@myumanitoba.ca
+				</a>
+				<a href="https://linkedin.com/in/petervu298" class="btn btn-secondary">
+					<svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+						<path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/>
+					</svg>
+					LinkedIn 💼
+				</a>
+				<a href="https://github.com/pieberrykinnie" class="btn btn-secondary">
+					<svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+						<path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/>
+					</svg>
+					Check my code 👨‍💻
+				</a>
+			</div>
+		</div>
+	</section>
 </Layout>

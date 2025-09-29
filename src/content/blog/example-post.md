@@ -1,14 +1,12 @@
 ---
-title: "Getting Started with Astro and Tailwind CSS"
-description: "A comprehensive guide to building a modern static site with Astro and Tailwind CSS, including best practices and performance optimizations."
-publishDate: 2024-01-15
+title: "Test Blog"
+description: "Test!"
+publishDate: 2025-09-27
 category: "Web Development"
 tags: ["astro", "tailwindcss", "javascript", "tutorial"]
 featured: true
 draft: false
 author: "Peter Vu"
-courseCode: "COMP 2080"
-courseName: "Algorithms: Analysis and Implementation"
 ---
 
 # Getting Started with Astro and Tailwind CSS

@@ -16,15 +16,33 @@ const courses = await Promise.all(
 // Group courses by academic year and sort by semester
 const coursesByYear = {};
 courses.forEach(course => {
-  const year = course.semester.split(' ')[1];
-  if (!coursesByYear[year]) {
-    coursesByYear[year] = [];
+  const semesterParts = course.semester.split(' ');
+  const semester = semesterParts[0];
+  const year = parseInt(semesterParts[1]);
+
+  // Calculate academic year: Fall uses current year, Winter/Summer use previous year
+  let academicYear;
+  if (semester === 'Fall') {
+    academicYear = `${year} - ${year + 1}`;
+  } else if (semester === 'Winter' || semester === 'Summer') {
+    academicYear = `${year - 1} - ${year}`;
+  } else {
+    // Default case for Spring or other semesters
+    academicYear = `${year - 1} - ${year}`;
   }
-  coursesByYear[year].push(course);
+
+  if (!coursesByYear[academicYear]) {
+    coursesByYear[academicYear] = [];
+  }
+  coursesByYear[academicYear].push(course);
 });
 
 // Sort years in descending order and courses within each year
-const sortedYears = Object.keys(coursesByYear).sort((a, b) => b - a);
+const sortedYears = Object.keys(coursesByYear).sort((a, b) => {
+  const yearA = parseInt(a.split(' - ')[0]);
+  const yearB = parseInt(b.split(' - ')[0]);
+  return yearB - yearA;
+});
 sortedYears.forEach(year => {
   coursesByYear[year].sort((a, b) => {
     const semesterOrder = { 'Fall': 2, 'Winter': 1, 'Spring': 0, 'Summer': 0 };
@@ -42,7 +60,7 @@ sortedYears.forEach(year => {
 			<div class="text-center mb-16 animate-fade-in">
 				<h1 class="text-4xl font-bold text-primary mb-4">Academic Coursework 📚</h1>
 				<p class="text-secondary text-lg max-w-3xl mx-auto">
-					A comprehensive overview of the courses I've taken during my Computer Science studies, including key projects and related blog writeups.
+          A comprehensive overview of the courses I've taken during my Computer Science studies. To be updated, with related writeups!
 				</p>
 			</div>
 
@@ -142,6 +160,7 @@ sortedYears.forEach(year => {
 			))}
 
 			<!-- Course Categories -->
+      <!--
 			<div class="card p-8 animate-fade-in">
 				<h2 class="text-3xl font-bold text-primary mb-8 text-center">Course Categories</h2>
 				<div class="grid grid-cols-1 md:grid-cols-3 gap-6">
@@ -174,6 +193,7 @@ sortedYears.forEach(year => {
 					</div>
 				</div>
 			</div>
+      -->
 
 			<!-- Browse Blog Button -->
 			<div class="text-center mt-12 animate-fade-in">
